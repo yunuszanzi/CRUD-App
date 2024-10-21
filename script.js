@@ -1,5 +1,6 @@
 var selectedRow = null;
-var newSerialNo = 0;
+var newSerialNo = 1; // Start serial from 1
+
 window.onload = function () {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
   if (isLoggedIn === "true") {
@@ -11,6 +12,8 @@ window.onload = function () {
   }
   loadTableData();
 };
+
+// Handle form submit
 function onFormSubmit(e) {
   event.preventDefault();
   var formData = readFormData();
@@ -18,11 +21,14 @@ function onFormSubmit(e) {
 
   if (isValid === true) {
     if (selectedRow === null) {
+      // New record insertion
+      formData.newSerialNo = newSerialNo++; // Auto-increment serial number
       insertNewRecord(formData);
       showToast("Form submitted successfully!", "success");
     } else {
+      // Update existing record
       updateRecord(formData);
-      showToast("Form updated sucessfully!", "success");
+      showToast("Form updated successfully!", "success");
     }
     resetForm();
     saveTableData();
@@ -34,6 +40,7 @@ function onFormSubmit(e) {
   }
 }
 
+// Reading form data
 function readFormData() {
   var formData = {};
   formData["newSerialNo"] = document.getElementById("newSerialNo").value;
@@ -46,18 +53,17 @@ function readFormData() {
   return formData;
 }
 
+// Insert new record in the table
 function insertNewRecord(data) {
   var table = document
     .getElementById("storedList")
     .getElementsByTagName("tbody")[0];
 
-  newSerialNo = newSerialNo + 1;
-
   var newRow = table.insertRow(table.length);
 
   // Insert the serial number in the first cell
   var cell0 = newRow.insertCell(0);
-  cell0.innerHTML = newSerialNo;
+  cell0.innerHTML = data.newSerialNo;
 
   var cell1 = newRow.insertCell(1);
   cell1.innerHTML = data.productCode;
@@ -79,9 +85,10 @@ function insertNewRecord(data) {
                      <button class='delete-btn' onClick='onDelete(this)'>Delete</button>`;
 }
 
+// Edit existing record
 function onEdit(td) {
   selectedRow = td.parentElement.parentElement;
-  
+
   document.getElementById("newSerialNo").value = selectedRow.cells[0].innerHTML;
   document.getElementById("productCode").value = selectedRow.cells[1].innerHTML;
   document.getElementById("productName").value = selectedRow.cells[2].innerHTML;
@@ -92,8 +99,8 @@ function onEdit(td) {
   document.getElementById("sellerEmail").value = selectedRow.cells[5].innerHTML;
 }
 
+// Update record
 function updateRecord(formData) {
-  selectedRow.cells[0].innerHTML = formData.newSerialNo;
   selectedRow.cells[1].innerHTML = formData.productCode;
   selectedRow.cells[2].innerHTML = formData.productName;
   selectedRow.cells[3].innerHTML = formData.productPrice;
@@ -102,23 +109,44 @@ function updateRecord(formData) {
   saveTableData();
 }
 
+// Delete record and update serial numbers
 function onDelete(td) {
   if (confirm("Do you want to delete this record?")) {
     row = td.parentElement.parentElement;
     document.getElementById("storedList").deleteRow(row.rowIndex);
     saveTableData();
+    // Adjust the serial numbers after deletion
+    // adjustSerialNumbers();
   }
   resetForm();
 }
 
+// // Adjust serial numbers after deletion
+// function adjustSerialNumbers() {
+//   var table = document
+//     .getElementById("storedList")
+//     .getElementsByTagName("tbody")[0];
+//   var rows = table.rows;
+
+//   newSerialNo = rows.length + 1;
+//   for (var i = 0; i < rows.length; i++) {
+//     rows[i].cells[0].innerHTML = i + 1;
+//   }
+//   saveTableData();
+// }
+
+// Reset form
 function resetForm() {
+  document.getElementById("newSerialNo").value = "";
   document.getElementById("productCode").value = "";
   document.getElementById("productName").value = "";
   document.getElementById("productPrice").value = "";
   document.getElementById("productQuantity").value = "";
   document.getElementById("sellerEmail").value = "";
+  selectedRow = null;
 }
 
+// Validate form
 function validateForm(data) {
   if (
     data.productCode.trim().length > 0 &&
@@ -131,6 +159,8 @@ function validateForm(data) {
     return false;
   }
 }
+
+// Show toast notifications
 function showToast(message, type) {
   var toast = document.getElementById("toast");
   toast.innerHTML = message;
@@ -148,77 +178,7 @@ function showToast(message, type) {
   }, 3000);
 }
 
-function resetNotification() {
-  showToast("Form reset successfully.", "success");
-}
-
-function onLogout() {
-  localStorage.removeItem("isLoggedIn");
-  location.reload();
-  showToast("logout Successful!", "success");
-}
-
-function onLoginSubmit(event) {
-  event.preventDefault();
-
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-
-  if (username === "yunus" && password === "12345") {
-    localStorage.setItem("isLoggedIn", "true");
-    document.getElementById("loginForm").style.display = "none";
-    document.getElementById("productForm").style.display = "block";
-    showToast("Login successful!", "success");
-  } else {
-    showToast("Invalid credentials, please try again.", "error");
-  }
-}
-
-// Prevent space as the first character for specific input fields
-document.getElementById("username").addEventListener("keydown", function (e) {
-  if (this.value.length === 0 && e.code === "Space") {
-    e.preventDefault();
-  }
-});
-document
-  .getElementById("productCode")
-  .addEventListener("keydown", function (e) {
-    if (this.value.length === 0 && e.code === "Space") {
-      e.preventDefault();
-    }
-  });
-
-document
-  .getElementById("productName")
-  .addEventListener("keydown", function (e) {
-    if (this.value.length === 0 && e.code === "Space") {
-      e.preventDefault();
-    }
-  });
-
-document
-  .getElementById("productPrice")
-  .addEventListener("keydown", function (e) {
-    if (this.value.length === 0 && e.code === "Space") {
-      e.preventDefault();
-    }
-  });
-
-document
-  .getElementById("productQuantity")
-  .addEventListener("keydown", function (e) {
-    if (this.value.length === 0 && e.code === "Space") {
-      e.preventDefault();
-    }
-  });
-
-document
-  .getElementById("sellerEmail")
-  .addEventListener("keydown", function (e) {
-    if (this.value.length === 0 && e.code === "Space") {
-      e.preventDefault();
-    }
-  });
+// Save table data to localStorage
 function saveTableData() {
   var table = document
     .getElementById("storedList")
@@ -242,6 +202,7 @@ function saveTableData() {
   localStorage.setItem("tableData", JSON.stringify(data)); // Save table data as a JSON string
 }
 
+// Load table data from localStorage
 function loadTableData() {
   var tableData = localStorage.getItem("tableData");
   if (tableData) {
@@ -249,5 +210,6 @@ function loadTableData() {
     data.forEach(function (item) {
       insertNewRecord(item);
     });
+    newSerialNo = data.length + 1; // Set serialNo to continue from the last saved record
   }
 }
