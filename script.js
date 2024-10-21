@@ -115,25 +115,10 @@ function onDelete(td) {
     row = td.parentElement.parentElement;
     document.getElementById("storedList").deleteRow(row.rowIndex);
     saveTableData();
-    // Adjust the serial numbers after deletion
-    // adjustSerialNumbers();
+
   }
   resetForm();
 }
-
-// // Adjust serial numbers after deletion
-// function adjustSerialNumbers() {
-//   var table = document
-//     .getElementById("storedList")
-//     .getElementsByTagName("tbody")[0];
-//   var rows = table.rows;
-
-//   newSerialNo = rows.length + 1;
-//   for (var i = 0; i < rows.length; i++) {
-//     rows[i].cells[0].innerHTML = i + 1;
-//   }
-//   saveTableData();
-// }
 
 // Reset form
 function resetForm() {
