@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>crud app</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div id="toast" class="toast"></div>
+      <!-- Login Form -->
+      <div id="loginForm">
+        <h2>Login</h2>
+        <form autocomplete="off" onsubmit="onLoginSubmit(event)">
+          <div class="username">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required />
+          </div>
+          <div class="password">
+            <label for="password">Password:</label>
+            <input type="password" id="password" required />
+          </div>
+          <div class="button">
+            <input type="submit" value="Login" />
+          </div>
+        </form>
+      </div>
+
+      <div id="productForm" style="display: none">
+        <div class="product-container">
+          <div class="prductInputForm">
+            <form autocomplete="off" onsubmit="onFormSubmit()">
+              <div class="prductInputForm-fields">
+                <label for="newSerialNo"
+                  >S.No.</label
+                >
+                <input
+                  type="number"
+                  name="newSerialNo"
+                  id="newSerialNo"
+                  disabled
+                />
+                </div>
+              <div class="prductInputForm-fields">
+                <label for="productCode"
+                  >Product Code<span class="required">*</span></label
+                >
+                <input
+                  type="text"
+                  name="productCode"
+                  id="productCode"
+                  required
+                />
+              </div>
+              <div class="prductInputForm-fields">
+                <label for="productName">Product Name</label>
+                <input type="text" name="productName" id="productName" />
+              </div>
+              <div class="prductInputForm-fields">
+                <label for="productPrice"
+                  >Price<span class="required">*</span></label
+                >
+                <input
+                  type="number"
+                  name="productPrice"
+                  id="productPrice"
+                  required
+                />
+              </div>
+
+              <div class="prductInputForm-fields">
+                <label for="productQuantity"
+                  >Quantity<span class="required">*</span></label
+                >
+                <input
+                  type="number"
+                  name="productQuantity"
+                  id="productQuantity"
+                  required
+                />
+              </div>
+              <div class="prductInputForm-fields">
+                <label for="sellerEmail"
+                  >Seller's Email<span class="required">*</span></label
+                >
+                <input
+                  type="email"
+                  name="sellerEmail"
+                  id="sellerEmail"
+                  required
+                />
+              </div>
+              <div class="form_action--button">
+                <input type="submit" value="submit" />
+                <input
+                  type="reset"
+                  value="reset"
+                  onclick="resetNotification()"
+                />
+                <button name="logout" id="logout" onclick="onLogout()">
+                  Logout
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="productOutputList">
+            <table class="list" id="storedList">
+              <thead>
+                <tr>
+                  <th>S.No.</th>
+                  <th>Product Code</th>
+                  <th>Product Name</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Email</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="./script.js"></script>
+  </body>
+</html>

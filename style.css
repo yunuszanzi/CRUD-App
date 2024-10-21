@@ -1,0 +1,230 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  background-color: aquamarine;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  padding: 20px;
+  gap: 20px;
+}
+
+#loginForm {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  background-color: #f9f9f9;
+}
+
+#loginForm h2 {
+  text-align: center;
+  grid-column: 1 / -1;
+}
+
+#loginForm .username, #loginForm .password {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+#loginForm input[type="text"],
+#loginForm input[type="password"],
+#loginForm input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+#loginForm input[type="submit"] {
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+#loginForm input[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+#productForm {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+#productForm label{
+  font-weight: bold;  
+}
+.prductInputForm {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.prductInputForm-fields {
+  display: grid;
+  gap: 10px;
+}
+
+.form_action--button {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.productOutputList {
+  display: grid;
+  justify-self: start;
+  grid-column: 2;
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+  background-color: rgb(135, 163, 196);
+  opacity: 95%;
+}
+
+thead th {
+  background-color: lightgray;
+  text-align: center;
+}
+
+tbody td {
+  border: 1px solid rgb(117, 101, 101);
+  padding: 8px 15px;
+}
+
+.toast {
+  visibility: hidden;
+  position: fixed;
+  top: 20px;
+  left: 90%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.toast.show {
+  visibility: visible;
+}
+
+.product-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 20px;
+    width: 900px;
+    margin: 50px auto;
+  }
+  
+  .prductInputForm {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .productOutputList {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  table.list {
+    text-align: center;
+    width: 620px;
+  }
+  
+  thead th {
+    background-color: lightgray;
+    text-align: start;
+  }
+  
+  input[type="text"],
+  input[type="number"],
+  input[type="email"] {
+    width: 95%;
+    padding: 12px 10px;
+    margin: 8px 0;
+    border: 1px solid gray;
+    border-radius: 4px;
+  }
+  
+  input[type="submit"],
+  input[type="reset"],
+  button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #eee;
+    border: 1px solid gray;
+  }
+  
+  input[type="submit"]:hover {
+    background-color: #11a754;
+  }
+  
+  input[type="reset"]:hover {
+    background-color: #4b99d8;
+  }
+  
+  button:hover {
+    background-color: #4b99d8;
+  }
+
+  .delete-btn {
+    background-color: #eee;
+    color: black;
+    border: 1px solid gray;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .delete-btn:hover {
+    background-color: red;
+    color: white;
+  }
+ 
+  .edit-btn {
+    background-color: #eee;
+    color: black;
+    border: 1px solid gray;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .edit-btn:hover {
+    background-color: #4b99d8;
+    color: white;
+  }
+  .required{
+    color: red;
+  }
+  
