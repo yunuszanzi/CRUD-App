@@ -12,6 +12,7 @@ window.onload = function () {
   }
   loadTableData();
 };
+
 function onLoginSubmit(event) {
   event.preventDefault();
 
@@ -19,7 +20,7 @@ function onLoginSubmit(event) {
   const password = document.getElementById("password").value;
 
   if (username === "yunus" && password === "12345") {
-    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem("isLoggedIn", "true");
     document.getElementById("loginForm").style.display = "none";
     document.getElementById("productForm").style.display = "block";
     showToast("Login successful!", "success");
@@ -28,10 +29,10 @@ function onLoginSubmit(event) {
   }
 }
 
-function onLogout(){
-  localStorage.removeItem('isLoggedIn');
+function onLogout() {
+  localStorage.removeItem("isLoggedIn");
   location.reload();
-  showToast('logout Successful!', "success");
+  showToast("logout Successful!", "success");
 }
 
 // Handle form submit
@@ -43,7 +44,7 @@ function onFormSubmit(e) {
   if (isValid === true) {
     if (selectedRow === null) {
       // New record insertion
-      formData.newSerialNo = newSerialNo++; // Auto-increment serial number
+      formData.newSerialNo = newSerialNo++;
       insertNewRecord(formData);
       showToast("Form submitted successfully!", "success");
     } else {
@@ -61,7 +62,6 @@ function onFormSubmit(e) {
   }
 }
 
-// Reading form data
 function readFormData() {
   var formData = {};
   formData["newSerialNo"] = document.getElementById("newSerialNo").value;
@@ -74,7 +74,6 @@ function readFormData() {
   return formData;
 }
 
-// Insert new record in the table
 function insertNewRecord(data) {
   var table = document
     .getElementById("storedList")
@@ -82,7 +81,6 @@ function insertNewRecord(data) {
 
   var newRow = table.insertRow(table.length);
 
-  // Insert the serial number in the first cell
   var cell0 = newRow.insertCell(0);
   cell0.innerHTML = data.newSerialNo;
 
@@ -106,7 +104,6 @@ function insertNewRecord(data) {
                      <button class='delete-btn' onClick='onDelete(this)'>Delete</button>`;
 }
 
-// Prevent space as the first character for specific input fields
 document.getElementById("username").addEventListener("keydown", function (e) {
   if (this.value.length === 0 && e.code === "Space") {
     e.preventDefault();
@@ -151,7 +148,7 @@ document
       e.preventDefault();
     }
   });
-// Edit existing record
+
 function onEdit(td) {
   selectedRow = td.parentElement.parentElement;
 
@@ -165,7 +162,6 @@ function onEdit(td) {
   document.getElementById("sellerEmail").value = selectedRow.cells[5].innerHTML;
 }
 
-// Update record
 function updateRecord(formData) {
   selectedRow.cells[1].innerHTML = formData.productCode;
   selectedRow.cells[2].innerHTML = formData.productName;
@@ -175,30 +171,32 @@ function updateRecord(formData) {
   saveTableData();
 }
 
-// Delete record and update serial numbers
 function onDelete(td) {
   if (confirm("Do you want to delete this record?")) {
     row = td.parentElement.parentElement;
     document.getElementById("storedList").deleteRow(row.rowIndex);
     saveTableData();
-    // Adjust the serial numbers after deletion
     adjustSerialNumbers();
   }
   resetForm();
 }
 
-// Adjust serial numbers after deletion
 function adjustSerialNumbers() {
   var table = document
     .getElementById("storedList")
     .getElementsByTagName("tbody")[0];
   var rows = table.rows;
 
-  newSerialNo = rows.length + 1; // Reset newSerialNo based on the number of rows
+  var lastSerialNo =
+    rows.length > 0 ? parseInt(rows[rows.length - 1].cells[0].innerHTML) : 0;
+  newSerialNo = lastSerialNo + 1;
 
-  for (var i = 0; i < rows.length; i++) {
-    rows[i].cells[0].innerHTML = i + 1; // Set the serial number in sequence
-  }
+  // newSerialNo = rows[i].cells[0].innerHTML = i + 1;
+  // newSerialNo = rows.length + 1; // Reset newSerialNo based on the number of rows
+
+  // for (var i = 0; i < rows.length; i++) {
+  //   rows[i].cells[0].innerHTML = i + 1; // Set the serial number in sequence
+  // }
   saveTableData();
 }
 
@@ -219,7 +217,7 @@ function validateForm(data) {
     data.productCode.trim().length > 0 &&
     data.productPrice.trim().length > 0 &&
     data.productQuantity.trim().length > 0 &&
-    data.sellerEmail.trim() !== ""
+    data.sellerEmail.trim().length > 0
   ) {
     return true;
   } else {
@@ -227,7 +225,6 @@ function validateForm(data) {
   }
 }
 
-// Show toast notifications
 function showToast(message, type) {
   var toast = document.getElementById("toast");
   toast.innerHTML = message;
@@ -245,7 +242,6 @@ function showToast(message, type) {
   }, 3000);
 }
 
-// Save table data to localStorage
 function saveTableData() {
   var table = document
     .getElementById("storedList")
@@ -266,10 +262,9 @@ function saveTableData() {
     data.push(rowData);
   }
 
-  localStorage.setItem("tableData", JSON.stringify(data)); // Save table data as a JSON string
+  localStorage.setItem("tableData", JSON.stringify(data));
 }
 
-// Load table data from localStorage
 function loadTableData() {
   var tableData = localStorage.getItem("tableData");
   if (tableData) {
@@ -277,6 +272,9 @@ function loadTableData() {
     data.forEach(function (item) {
       insertNewRecord(item);
     });
-    newSerialNo = data.length + 1; // Set serialNo to continue from the last saved record
+    // console.log("data", data);
+    // console.log("data of last record", data[data.length - 1].newSerialNo)
+    newSerialNo = parseInt(data[data.length - 1].newSerialNo) + 1;
+    // console.log("new serialNo", newSerialNo)
   }
 }
