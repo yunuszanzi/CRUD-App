@@ -1,5 +1,5 @@
 var selectedRow = null;
-var newSerialNo = 1; // Start serial from 1
+var newSerialNo = 1;
 
 window.onload = function () {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -12,6 +12,27 @@ window.onload = function () {
   }
   loadTableData();
 };
+function onLoginSubmit(event) {
+  event.preventDefault();
+
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  if (username === "yunus" && password === "12345") {
+    localStorage.setItem('isLoggedIn', 'true');
+    document.getElementById("loginForm").style.display = "none";
+    document.getElementById("productForm").style.display = "block";
+    showToast("Login successful!", "success");
+  } else {
+    showToast("Invalid credentials, please try again.", "error");
+  }
+}
+
+function onLogout(){
+  localStorage.removeItem('isLoggedIn');
+  location.reload();
+  showToast('logout Successful!', "success");
+}
 
 // Handle form submit
 function onFormSubmit(e) {
@@ -85,6 +106,51 @@ function insertNewRecord(data) {
                      <button class='delete-btn' onClick='onDelete(this)'>Delete</button>`;
 }
 
+// Prevent space as the first character for specific input fields
+document.getElementById("username").addEventListener("keydown", function (e) {
+  if (this.value.length === 0 && e.code === "Space") {
+    e.preventDefault();
+  }
+});
+document
+  .getElementById("productCode")
+  .addEventListener("keydown", function (e) {
+    if (this.value.length === 0 && e.code === "Space") {
+      e.preventDefault();
+    }
+  });
+
+document
+  .getElementById("productName")
+  .addEventListener("keydown", function (e) {
+    if (this.value.length === 0 && e.code === "Space") {
+      e.preventDefault();
+    }
+  });
+
+document
+  .getElementById("productPrice")
+  .addEventListener("keydown", function (e) {
+    if (this.value.length === 0 && e.code === "Space") {
+      e.preventDefault();
+    }
+  });
+
+document
+  .getElementById("productQuantity")
+  .addEventListener("keydown", function (e) {
+    if (this.value.length === 0 && e.code === "Space") {
+      e.preventDefault();
+    }
+  });
+
+document
+  .getElementById("sellerEmail")
+  .addEventListener("keydown", function (e) {
+    if (this.value.length === 0 && e.code === "Space") {
+      e.preventDefault();
+    }
+  });
 // Edit existing record
 function onEdit(td) {
   selectedRow = td.parentElement.parentElement;
@@ -115,9 +181,25 @@ function onDelete(td) {
     row = td.parentElement.parentElement;
     document.getElementById("storedList").deleteRow(row.rowIndex);
     saveTableData();
-
+    // Adjust the serial numbers after deletion
+    adjustSerialNumbers();
   }
   resetForm();
+}
+
+// Adjust serial numbers after deletion
+function adjustSerialNumbers() {
+  var table = document
+    .getElementById("storedList")
+    .getElementsByTagName("tbody")[0];
+  var rows = table.rows;
+
+  newSerialNo = rows.length + 1; // Reset newSerialNo based on the number of rows
+
+  for (var i = 0; i < rows.length; i++) {
+    rows[i].cells[0].innerHTML = i + 1; // Set the serial number in sequence
+  }
+  saveTableData();
 }
 
 // Reset form
