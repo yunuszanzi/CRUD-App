@@ -1,7 +1,44 @@
 var selectedRow = null;
 var newSerialNo = 1;
+const allInputFields = [
+  "username",
+  "productCode",
+  "productName",
+  "productPrice",
+  "productQuantity",
+  "sellerEmail",
+];
 
-window.onload = function () {
+const inputProductFields = [
+  "productCode",
+  "productName",
+  "productPrice",
+  "productQuantity",
+  "sellerEmail",
+];
+const allowedKeys = [
+  "Backspace",
+  "ArrowLeft",
+  "ArrowRight",
+  "ArrowUp",
+  "ArrowDown",
+  "Delete",
+  "Tab",
+];
+
+allInputFields.forEach((id) => {
+  const element = document.getElementById(id);
+
+  element.addEventListener("keydown", function (e) {
+    if (this.value.length === 0 && e.code === "Space") {
+      e.preventDefault();
+    } else if (this.value.length > 5 && !allowedKeys.includes(e.code)) {
+      e.preventDefault();
+    }
+  });
+});
+
+window.onload = () => {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
   if (isLoggedIn === "true") {
     document.getElementById("loginForm").style.display = "none";
@@ -13,9 +50,8 @@ window.onload = function () {
   loadTableData();
 };
 
-function onLoginSubmit(event) {
-  event.preventDefault();
-
+const onLoginSubmit = (e) => {
+  e.preventDefault();
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
 
@@ -27,54 +63,58 @@ function onLoginSubmit(event) {
   } else {
     showToast("Invalid credentials, please try again.", "error");
   }
-}
+};
 
-function onLogout() {
+const onLogout = () => {
   localStorage.removeItem("isLoggedIn");
   location.reload();
   showToast("logout Successful!", "success");
-}
+};
 
-// Handle form submit
-function onFormSubmit(e) {
+const onFormSubmit = (event) => {
   event.preventDefault();
   var formData = readFormData();
   var isValid = validateForm(formData);
 
   if (isValid === true) {
     if (selectedRow === null) {
-      // New record insertion
       formData.newSerialNo = newSerialNo++;
+      console.log("Serial Numbar", formData.newSerialNo);
       insertNewRecord(formData);
       showToast("Form submitted successfully!", "success");
     } else {
-      // Update existing record
       updateRecord(formData);
       showToast("Form updated successfully!", "success");
     }
     resetForm();
     saveTableData();
+    // location.reload();
   } else {
     showToast(
       "Form submission failed. please recheck the required fields.",
       "error"
     );
   }
-}
+};
 
-function readFormData() {
+// const inputProductFields = [
+//   "productCode",
+//   "productName",
+//   "productPrice",
+//   "productQuantity",
+//   "sellerEmail",
+// ];
+
+const readFormData = () => {
   var formData = {};
-  formData["newSerialNo"] = document.getElementById("newSerialNo").value;
-  formData["productCode"] = document.getElementById("productCode").value;
-  formData["productName"] = document.getElementById("productName").value;
-  formData["productPrice"] = document.getElementById("productPrice").value;
-  formData["productQuantity"] =
-    document.getElementById("productQuantity").value;
-  formData["sellerEmail"] = document.getElementById("sellerEmail").value;
+  // formData["newSerialNo"] = document.getElementById("newSerialNo").value;
+  inputProductFields.forEach(
+    (field) => (formData[field] = document.getElementById(field).value)
+  );
   return formData;
-}
+};
 
-function insertNewRecord(data) {
+const insertNewRecord = (data) => {
   var table = document
     .getElementById("storedList")
     .getElementsByTagName("tbody")[0];
@@ -102,76 +142,25 @@ function insertNewRecord(data) {
   var cell6 = newRow.insertCell(6);
   cell6.innerHTML = `<button class='edit-btn' onClick='onEdit(this)'>Edit</button> 
                      <button class='delete-btn' onClick='onDelete(this)'>Delete</button>`;
-}
+};
 
-document.getElementById("username").addEventListener("keydown", function (e) {
-  if (this.value.length === 0 && e.code === "Space") {
-    e.preventDefault();
-  }
-});
-document
-  .getElementById("productCode")
-  .addEventListener("keydown", function (e) {
-    if (this.value.length === 0 && e.code === "Space") {
-      e.preventDefault();
-    }
-  });
-
-document
-  .getElementById("productName")
-  .addEventListener("keydown", function (e) {
-    if (this.value.length === 0 && e.code === "Space") {
-      e.preventDefault();
-    }
-  });
-
-document
-  .getElementById("productPrice")
-  .addEventListener("keydown", function (e) {
-    if (this.value.length === 0 && e.code === "Space") {
-      e.preventDefault();
-    }
-  });
-
-document
-  .getElementById("productQuantity")
-  .addEventListener("keydown", function (e) {
-    if (this.value.length === 0 && e.code === "Space") {
-      e.preventDefault();
-    }
-  });
-
-document
-  .getElementById("sellerEmail")
-  .addEventListener("keydown", function (e) {
-    if (this.value.length === 0 && e.code === "Space") {
-      e.preventDefault();
-    }
-  });
-
-function onEdit(td) {
+const onEdit = (td) => {
   selectedRow = td.parentElement.parentElement;
-
   document.getElementById("newSerialNo").value = selectedRow.cells[0].innerHTML;
-  document.getElementById("productCode").value = selectedRow.cells[1].innerHTML;
-  document.getElementById("productName").value = selectedRow.cells[2].innerHTML;
-  document.getElementById("productPrice").value =
-    selectedRow.cells[3].innerHTML;
-  document.getElementById("productQuantity").value =
-    selectedRow.cells[4].innerHTML;
-  document.getElementById("sellerEmail").value = selectedRow.cells[5].innerHTML;
-}
+  inputProductFields.forEach((field, index) => {
+    document.getElementById(field).value =
+      selectedRow.cells[index + 1].innerHTML;
+  });
+};
 
-function updateRecord(formData) {
-  selectedRow.cells[1].innerHTML = formData.productCode;
-  selectedRow.cells[2].innerHTML = formData.productName;
-  selectedRow.cells[3].innerHTML = formData.productPrice;
-  selectedRow.cells[4].innerHTML = formData.productQuantity;
-  selectedRow.cells[5].innerHTML = formData.sellerEmail;
+const updateRecord = (formData) => {
+  inputProductFields.forEach((field, index) => {
+    selectedRow.cells[index + 1].innerHTML = formData[field];
+  });
   saveTableData();
-}
+};
 
-function onDelete(td) {
+const onDelete = (td) => {
   if (confirm("Do you want to delete this record?")) {
     row = td.parentElement.parentElement;
     document.getElementById("storedList").deleteRow(row.rowIndex);
@@ -179,9 +168,9 @@ function onDelete(td) {
     adjustSerialNumbers();
   }
   resetForm();
-}
+};
 
-function adjustSerialNumbers() {
+const adjustSerialNumbers = () => {
   var table = document
     .getElementById("storedList")
     .getElementsByTagName("tbody")[0];
@@ -190,29 +179,20 @@ function adjustSerialNumbers() {
   var lastSerialNo =
     rows.length > 0 ? parseInt(rows[rows.length - 1].cells[0].innerHTML) : 0;
   newSerialNo = lastSerialNo + 1;
-
-  // newSerialNo = rows[i].cells[0].innerHTML = i + 1;
-  // newSerialNo = rows.length + 1; // Reset newSerialNo based on the number of rows
-
-  // for (var i = 0; i < rows.length; i++) {
-  //   rows[i].cells[0].innerHTML = i + 1; // Set the serial number in sequence
-  // }
   saveTableData();
-}
+};
 
 // Reset form
-function resetForm() {
+const resetForm = () => {
   document.getElementById("newSerialNo").value = "";
-  document.getElementById("productCode").value = "";
-  document.getElementById("productName").value = "";
-  document.getElementById("productPrice").value = "";
-  document.getElementById("productQuantity").value = "";
-  document.getElementById("sellerEmail").value = "";
+  inputProductFields.map(
+    (field) => (document.getElementById(field).value = "")
+  );
   selectedRow = null;
-}
+};
 
 // Validate form
-function validateForm(data) {
+const validateForm = (data) => {
   if (
     data.productCode.trim().length > 0 &&
     data.productPrice.trim().length > 0 &&
@@ -223,9 +203,9 @@ function validateForm(data) {
   } else {
     return false;
   }
-}
+};
 
-function showToast(message, type) {
+const showToast = (message, type) => {
   var toast = document.getElementById("toast");
   toast.innerHTML = message;
 
@@ -240,9 +220,9 @@ function showToast(message, type) {
   setTimeout(function () {
     toast.className = toast.className.replace("show", "");
   }, 3000);
-}
+};
 
-function saveTableData() {
+const saveTableData = () => {
   var table = document
     .getElementById("storedList")
     .getElementsByTagName("tbody")[0];
@@ -261,20 +241,16 @@ function saveTableData() {
     };
     data.push(rowData);
   }
-
   localStorage.setItem("tableData", JSON.stringify(data));
-}
+};
 
-function loadTableData() {
+const loadTableData = () => {
   var tableData = localStorage.getItem("tableData");
   if (tableData) {
     var data = JSON.parse(tableData);
     data.forEach(function (item) {
       insertNewRecord(item);
     });
-    // console.log("data", data);
-    // console.log("data of last record", data[data.length - 1].newSerialNo)
     newSerialNo = parseInt(data[data.length - 1].newSerialNo) + 1;
-    // console.log("new serialNo", newSerialNo)
   }
-}
+};

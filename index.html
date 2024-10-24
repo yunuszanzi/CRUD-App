@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>crud app</title>
     <link rel="stylesheet" href="style.css" />
-    
   </head>
   <body>
     <div class="container">
@@ -31,18 +30,18 @@
       <div id="productForm" style="display: none">
         <div class="product-container">
           <div class="prductInputForm">
-            <form autocomplete="off" onsubmit="onFormSubmit()">
+            <form autocomplete="off" onsubmit="onFormSubmit(event)">
+              
               <div class="prductInputForm-fields">
-                <label for="newSerialNo"
-                  >S.No.</label
-                >
+                <label for="newSerialNo">S.No.</label>
                 <input
                   type="number"
                   name="newSerialNo"
                   id="newSerialNo"
                   disabled
                 />
-                </div>
+              </div>
+
               <div class="prductInputForm-fields">
                 <label for="productCode"
                   >Product Code<span class="required">*</span></label
@@ -81,6 +80,7 @@
                   required
                 />
               </div>
+
               <div class="prductInputForm-fields">
                 <label for="sellerEmail"
                   >Seller's Email<span class="required">*</span></label
@@ -92,17 +92,15 @@
                   required
                 />
               </div>
+
               <div class="form_action--button">
                 <input type="submit" value="submit" />
-                <input
-                  type="reset"
-                  value="reset"
-                  onclick="resetNotification()"
-                />
+                <input type="reset" value="reset" onclick="resetForm()" />
                 <button name="logout" id="logout" onclick="onLogout()">
                   logout
                 </button>
               </div>
+
             </form>
           </div>
 
